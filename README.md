@@ -104,7 +104,7 @@ The values for secrets should be setup in Step 1. Secrets should be created in S
 
   buildVersion: # Veracode Scan name / build version and is optional. This attribute is applicable only for Veracode.
 
-  securityToolId: # Security tool onboarded in ServiceNow (sys_id of the onboarded security tool).
+  securityToolId: # Security tool onboarded in ServiceNow (sys_id of the onboarded security tool) and is optional.
   }
   ```
 
