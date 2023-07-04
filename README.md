@@ -96,6 +96,17 @@ The values for secrets should be setup in Step 1. Secrets should be created in S
 
 **Required**  Security Result Attributes
 
+  ```
+  {
+  applicationName: # Name of your Veracode application and is required. This attribute is applicable only for Veracode.
+
+  scanner:  # Scanning tool and is required e.g. Veracode.
+
+  buildVersion: # Veracode Scan name / build version and is optional. This attribute is applicable only for Veracode.
+
+  securityToolId: # Security tool onboarded in ServiceNow (sys_id of the onboarded security tool).
+  }
+  ```
 
 ## Outputs
 No outputs produced.
