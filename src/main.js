@@ -100,6 +100,7 @@ const axios = require('axios');
             core.setFailed('Invalid Credentials. Please correct the credentials and try again.');
         } else {
             core.setFailed(`ServiceNow Security Scan Results are NOT created. Please check ServiceNow logs for more details.`);
+            core.setFailed(`[ServiceNow DevOps] Security Scan, Error message :${e.message}`);
         }
     }
 
