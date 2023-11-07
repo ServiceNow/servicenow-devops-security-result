@@ -108,15 +108,15 @@ function circularSafeStringify(obj) {
             console.log("FAILED: Security Scan could not be registered");
     } catch (e) {
         core.debug('[ServiceNow DevOps] Security Scan Results, Error: '+JSON.stringify(e));
+        if(e.response && e.response.data) {
+            var responseObject=circularSafeStringify(e.response.data);
+            core.debug('[ServiceNow DevOps] Security Scan Results, Status code :'+e.response.statusCode+', Response data :'+responseObject);          
+        }
+
         if (e.message.includes('ECONNREFUSED') || e.message.includes('ENOTFOUND') || e.message.includes('405')) {
             core.setFailed('ServiceNow Instance URL is NOT valid. Please correct the URL and try again.');
         } else if (e.message.includes('401')) {
             core.setFailed('Invalid username and password or Invalid token and toolid. Please correct the input parameters and try again.');
-            if(e.response && e.response.data) 
-            {
-                var responseObject=circularSafeStringify(e.response.data);
-                core.debug('[ServiceNow DevOps] Security Scan Results, Response data :'+responseObject);          
-            }
         } else if(e.message.includes('400') || e.message.includes('404')){
             let errMsg = '[ServiceNow DevOps] Security Scan Results are not Successful. ';
             let errMsgSuffix = ' Please provide valid inputs.';
