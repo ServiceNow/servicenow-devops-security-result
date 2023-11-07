@@ -9454,7 +9454,7 @@ function circularSafeStringify(obj) {
                 core.setFailed(errMsg);
             }
         } else {
-            core.setFailed('ServiceNow Security Scan Results are NOT created. Please check ServiceNow logs for more details.');
+            core.setFailed(`ServiceNow Security Scan Results are NOT created. Please check ServiceNow logs for more details.`);
         }
     }
 
