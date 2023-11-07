@@ -9322,6 +9322,19 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const axios = __nccwpck_require__(8757);
 
+function circularSafeStringify(obj) {
+    const seen = new WeakSet();
+    return JSON.stringify(obj, (key, value) => {
+      if (typeof value === 'object' && value !== null) {
+        if (seen.has(value)) {
+          return '[Circular]';
+        }
+        seen.add(value);
+      }
+      return value;
+    });
+}
+
 (async function main() {
     let instanceUrl = core.getInput('instance-url', { required: true });
     const toolId = core.getInput('tool-id', { required: true });
@@ -9415,13 +9428,33 @@ const axios = __nccwpck_require__(8757);
         else
             console.log("FAILED: Security Scan could not be registered");
     } catch (e) {
+        core.debug('[ServiceNow DevOps] Security Scan Results, Error: '+JSON.stringify(e));
         if (e.message.includes('ECONNREFUSED') || e.message.includes('ENOTFOUND') || e.message.includes('405')) {
             core.setFailed('ServiceNow Instance URL is NOT valid. Please correct the URL and try again.');
         } else if (e.message.includes('401')) {
-            core.setFailed('Invalid Credentials. Please correct the credentials and try again.');
+            core.setFailed('Invalid username and password or Invalid token and toolid. Please correct the input parameters and try again.');
+            if(e.response && e.response.data) 
+            {
+                var responseObject=circularSafeStringify(e.response.data);
+                core.debug('[ServiceNow DevOps] Security Scan Results, Response data :'+responseObject);          
+            }
+        } else if(e.message.includes('400') || e.message.includes('404')){
+            let errMsg = '[ServiceNow DevOps] Security Scan Results are not Successful. ';
+            let errMsgSuffix = ' Please provide valid inputs.';
+            let responseData = e.response.data;
+            if (responseData && responseData.result && responseData.result.errorMessage) {
+                errMsg = errMsg + responseData.result.errorMessage + errMsgSuffix;
+                core.setFailed(errMsg);
+            }
+            else if (responseData && responseData.result && responseData.result.details && responseData.result.details.errors) {
+                let errors = responseData.result.details.errors;
+                for (var index in errors) {
+                    errMsg = errMsg + errors[index].message + errMsgSuffix;
+                }
+                core.setFailed(errMsg);
+            }
         } else {
-            core.setFailed(`ServiceNow Security Scan Results are NOT created. Please check ServiceNow logs for more details.`);
-            core.setFailed(`[ServiceNow DevOps] Security Scan, Error message :${e.message}`);
+            core.setFailed('ServiceNow Security Scan Results are NOT created. Please check ServiceNow logs for more details.');
         }
     }
 
