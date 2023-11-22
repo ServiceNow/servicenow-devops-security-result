@@ -9384,7 +9384,7 @@ function circularSafeStringify(obj) {
             securityResultAttributes: securityResultAttributes
         };
 
-        core.debug('Security scan results Custon Action payload is : ${JSON.stringify(pipelineInfo)}\n\n');
+        core.debug(`Security scan results Custon Action payload is : ${JSON.stringify(pipelineInfo)}\n\n`);
     } catch (e) {
         core.setFailed(`Exception setting the payload ${e}`);
         return;
@@ -9420,8 +9420,9 @@ function circularSafeStringify(obj) {
             core.setFailed('For Basic Auth, both a username and password are mandatory for integration user authentication.');
             return;
         }
-
+        core.debug("[ServiceNow DevOps], Sending Request for Security Result, Request Header :"+JSON.stringify(httpHeaders)+", Payload :"+JSON.stringify(payload));
         responseData = await axios.post(restEndpoint, JSON.stringify(payload), httpHeaders);
+        core.debug("[ServiceNow DevOps], Receiving response for Security Result, Response :"+responseData);
 
         if (responseData.data && responseData.data.result)
             console.log("\n \x1b[1m\x1b[32m SUCCESS: Security Scan registration was successful" + '\x1b[0m\x1b[0m');
