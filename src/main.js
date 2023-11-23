@@ -99,19 +99,19 @@ function circularSafeStringify(obj) {
             core.setFailed('For Basic Auth, both a username and password are mandatory for integration user authentication.');
             return;
         }
-        core.debug("[ServiceNow DevOps], Sending Request for Security Result, Request Header :"+JSON.stringify(httpHeaders)+", Payload :"+JSON.stringify(payload));
+        core.debug("[ServiceNow DevOps], Sending Request for Security Result, Request Header :"+JSON.stringify(httpHeaders)+", Payload :"+JSON.stringify(payload)+"\n");
         responseData = await axios.post(restEndpoint, JSON.stringify(payload), httpHeaders);
-        core.debug("[ServiceNow DevOps], Receiving response for Security Result, Response :"+responseData);
+        core.debug("[ServiceNow DevOps], Receiving response for Security Result, Response :"+responseData+"\n");
 
         if (responseData.data && responseData.data.result)
             console.log("\n \x1b[1m\x1b[32m SUCCESS: Security Scan registration was successful" + '\x1b[0m\x1b[0m');
         else
             console.log("FAILED: Security Scan could not be registered");
     } catch (e) {
-        core.debug('[ServiceNow DevOps] Security Scan Results, Error: '+JSON.stringify(e));
+        core.debug('[ServiceNow DevOps] Security Scan Results, Error: '+JSON.stringify(e)+"\n");
         if(e.response && e.response.data) {
             var responseObject=circularSafeStringify(e.response.data);
-            core.debug('[ServiceNow DevOps] Security Scan Results, Status code :'+e.response.statusCode+', Response data :'+responseObject);          
+            core.debug('[ServiceNow DevOps] Security Scan Results, Status code :'+e.response.statusCode+', Response data :'+responseObject+"\n");          
         }
 
         if (e.message.includes('ECONNREFUSED') || e.message.includes('ENOTFOUND') || e.message.includes('405')) {
