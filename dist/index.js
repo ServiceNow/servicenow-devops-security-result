@@ -9432,7 +9432,7 @@ function circularSafeStringify(obj) {
         core.debug('[ServiceNow DevOps] Security Scan Results, Error: '+JSON.stringify(e)+"\n");
         if(e.response && e.response.data) {
             var responseObject=circularSafeStringify(e.response.data);
-            core.debug('[ServiceNow DevOps] Security Scan Results, Status code :'+e.response.statusCode+', Response data :'+responseObject+"\n");          
+            core.debug('[ServiceNow DevOps] Security Scan Results, Status code :'+e.response.status+', Response data :'+responseObject+"\n");          
         }
 
         if (e.message.includes('ECONNREFUSED') || e.message.includes('ENOTFOUND') || e.message.includes('405')) {
