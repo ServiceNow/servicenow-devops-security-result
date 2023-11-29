@@ -4,7 +4,8 @@ const axios = require('axios');
 function circularSafeStringify(obj) {
     const seen = new WeakSet();
     return JSON.stringify(obj, (key, value) => {
-      if (typeof value === 'object' && value !== null) {
+        if (key === '_sessionCache') return undefined;
+        if (typeof value === 'object' && value !== null) {
         if (seen.has(value)) {
           return '[Circular]';
         }
@@ -101,7 +102,7 @@ function circularSafeStringify(obj) {
         }
         core.debug("[ServiceNow DevOps], Sending Request for Security Result, Request Header :"+JSON.stringify(httpHeaders)+", Payload :"+JSON.stringify(payload)+"\n");
         responseData = await axios.post(restEndpoint, JSON.stringify(payload), httpHeaders);
-        core.debug("[ServiceNow DevOps], Receiving response for Security Result, Response :"+responseData+"\n");
+        core.debug("[ServiceNow DevOps], Receiving response for Security Result, Response :"+circularSafeStringify(responseData)+"\n");
 
         if (responseData.data && responseData.data.result)
             console.log("\n \x1b[1m\x1b[32m SUCCESS: Security Scan registration was successful" + '\x1b[0m\x1b[0m');
