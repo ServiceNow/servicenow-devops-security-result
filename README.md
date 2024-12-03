@@ -12,7 +12,7 @@ This custom action needs to be added at step level in a job to register security
 On GitHub, go in your organization settings or repository settings, click on the _Secrets > Actions_ and create a new secret.
 
 Create secrets called 
-For token based authentication which is available from v2.0.0, create secrets called 
+For token based authentication which is available from v3.0.0, create secrets called 
 - `SN_DEVOPS_INTEGRATION_TOKEN` required for token based authentication
 - `SN_INSTANCE_URL` your ServiceNow instance URL, for example **https://test.service-now.com**
 - `SN_ORCHESTRATION_TOOL_ID` only the **sys_id** is required for the GitHub tool created in your ServiceNow instance
@@ -29,7 +29,7 @@ Use needs to configure the identified upstream job. See [test.yml](.github/workf
 
 ## Step 4: Configure the GitHub Action if need to adapt for your needs or workflows
 
-# For Token based Authentication which is available from v2.0.0 at ServiceNow instance
+# For Token based Authentication which is available from v3.0.0 at ServiceNow instance
 
 ### GitHub-Veracode:
 ```yaml
