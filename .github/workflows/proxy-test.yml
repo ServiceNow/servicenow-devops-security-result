@@ -1,0 +1,37 @@
+# Example: ServiceNow DevOps Security Result with HTTPS Proxy Support
+#
+# This workflow demonstrates how to route the ServiceNow DevOps Security Result
+# action through a corporate HTTPS proxy. The action reads the HTTPS_PROXY
+# environment variable and tunnels all requests via HTTP CONNECT.
+#
+# Required secrets:
+#   HTTPS_PROXY_URL           - Proxy URL, e.g. http://<host>:<port> or http://user:pass@<host>:<port>
+#   SN_INSTANCE_URL           - ServiceNow instance URL
+#   SN_DEVOPS_INTEGRATION_TOKEN - DevOps integration token
+#   SN_ORCHESTRATION_TOOL_ID  - Orchestration tool sys_id
+
+name: Proxy Test - DevOps Security Result
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  securityResult:
+    name: ServiceNow Security Result
+    runs-on: ubuntu-latest
+
+    # Set HTTPS_PROXY so the action routes traffic through your proxy
+    env:
+      HTTPS_PROXY: ${{ secrets.HTTPS_PROXY_URL }}
+
+    steps:
+      - name: ServiceNow Security Result
+        uses: ServiceNow/servicenow-devops-security-result@feature/https-proxy-agent
+        with:
+          devops-integration-token: ${{ secrets.SN_DEVOPS_INTEGRATION_TOKEN }}
+          instance-url: ${{ secrets.SN_INSTANCE_URL }}
+          tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
+          context-github: ${{ toJSON(github) }}
+          job-name: 'ServiceNow Security Result'
+          security-result-attributes: '{"scanner":"Veracode","applicationName":"MyApp","securityToolId":"${{ secrets.SN_ORCHESTRATION_TOOL_ID }}"}'
